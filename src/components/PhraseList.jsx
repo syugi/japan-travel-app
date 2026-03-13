@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { speakJapanese } from '../utils/tts';
 
 const PhraseList = ({ situation }) => {
+  const [selectedPhrase, setSelectedPhrase] = useState(null);
+
   if (!situation || !situation.phrases || situation.phrases.length === 0) {
     return <div className="message">회화 데이터가 없습니다.</div>;
   }
@@ -27,12 +29,31 @@ const PhraseList = ({ situation }) => {
     };
   }, []);
 
-  const handleSpeak = (text) => {
-    // iOS 빈 음성 방지
+  // 모달 열릴 때 body 스크롤 방지
+  useEffect(() => {
+    if (selectedPhrase) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [selectedPhrase]);
+
+  const handleSpeak = (text, e) => {
+    if (e) e.stopPropagation();
     if (window.speechSynthesis && window.speechSynthesis.paused) {
       window.speechSynthesis.resume();
     }
     speakJapanese(text);
+  };
+
+  const handleCardClick = (phrase) => {
+    setSelectedPhrase(phrase);
+    speakJapanese(phrase.jp);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedPhrase(null);
   };
 
   return (
@@ -43,13 +64,17 @@ const PhraseList = ({ situation }) => {
       </div>
       <div className="phrase-list">
         {situation.phrases.map((phrase) => (
-          <div key={phrase.id} className="phrase-card">
+          <div
+            key={phrase.id}
+            className="phrase-card"
+            onClick={() => handleCardClick(phrase)}
+          >
             <div className="phrase-kor">{phrase.kor}</div>
             <div className="phrase-jp">{phrase.jp}</div>
             <div className="phrase-roma">{phrase.pronunciation || ''}</div>
-            <button 
+            <button
               className="speak-btn"
-              onClick={() => handleSpeak(phrase.jp)}
+              onClick={(e) => handleSpeak(phrase.jp, e)}
               aria-label="읽어주기"
             >
               🔊
@@ -57,6 +82,27 @@ const PhraseList = ({ situation }) => {
           </div>
         ))}
       </div>
+
+      {selectedPhrase && (
+        <div className="modal-overlay" onClick={handleCloseModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-btn" onClick={handleCloseModal} aria-label="닫기">✕</button>
+            <span className="modal-label">일본인에게 보여주세요</span>
+            <div className="modal-kor">{selectedPhrase.kor}</div>
+            <div className="modal-divider" />
+            <div className="modal-jp">{selectedPhrase.jp}</div>
+            <div className="modal-divider" />
+            <div className="modal-roma">{selectedPhrase.pronunciation || ''}</div>
+            <button
+              className="modal-speak-btn"
+              onClick={(e) => handleSpeak(selectedPhrase.jp, e)}
+              aria-label="읽어주기"
+            >
+              🔊
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
