@@ -1,7 +1,7 @@
 {
   "name": "일본여행",
   "short_name": "일본여행",
-  "description": "부모님과 함께하는 일본여행 회화 앱",
+  "description": "일본여행 회화 앱",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#161622",

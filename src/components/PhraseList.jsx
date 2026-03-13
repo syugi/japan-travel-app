@@ -87,7 +87,7 @@ const PhraseList = ({ situation }) => {
         <div className="modal-overlay" onClick={handleCloseModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <button className="modal-close-btn" onClick={handleCloseModal} aria-label="닫기">✕</button>
-            <span className="modal-label">일본인에게 보여주세요</span>
+            {/* <span className="modal-label">일본인에게 보여주세요</span> */}
             <div className="modal-kor">{selectedPhrase.kor}</div>
             <div className="modal-divider" />
             <div className="modal-jp">{selectedPhrase.jp}</div>
