@@ -26,6 +26,12 @@ body {
   justify-content: center;
 }
 
+main {
+  flex: 1;
+  background-color: #f0eff5;
+  padding-bottom: calc(64px + env(safe-area-inset-bottom));
+}
+
 #root {
   width: 100%;
   max-width: 500px;
@@ -212,3 +218,285 @@ body {
   margin-top: 4px;
 }
 .modal-speak-btn:active { transform: scale(0.88); }
+
+/* ===== 하단 탭 바 ===== */
+.bottom-tab-bar {
+  position: fixed;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100%; max-width: 500px;
+  background: var(--dark);
+  display: flex;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 300;
+}
+.tab-btn {
+  flex: 1;
+  background: none; border: none;
+  color: rgba(255,255,255,0.45);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 10px 4px 8px;
+  cursor: pointer; gap: 3px;
+  transition: color 0.15s;
+  min-height: 56px;
+}
+.tab-btn--active { color: var(--red); }
+.tab-btn:active { opacity: 0.7; }
+.tab-icon { font-size: 22px; line-height: 1; }
+.tab-label { font-size: 10px; font-weight: 700; letter-spacing: -0.3px; }
+
+/* ===== 즐겨찾기 버튼 (문구 카드 내) ===== */
+.fav-btn {
+  position: absolute; top: 10px; left: 10px;
+  background: none; border: none;
+  font-size: 20px; color: #ccc;
+  cursor: pointer; padding: 4px;
+  line-height: 1; transition: color 0.12s, transform 0.12s;
+}
+.fav-btn--active { color: #f5a623; }
+.fav-btn:active { transform: scale(0.85); }
+
+/* 즐겨찾기 버튼이 있는 카드는 왼쪽 패딩 조정 */
+.phrase-card:has(.fav-btn) {
+  padding-left: 40px;
+}
+
+/* ===== 문구 출처 태그 (검색/즐겨찾기) ===== */
+.phrase-source {
+  font-size: 11px; color: var(--muted);
+  font-weight: 600; margin-bottom: 5px;
+  letter-spacing: -0.2px;
+}
+
+/* ===== 홈 검색창 (sticky, 헤더 바로 아래) ===== */
+.home-search-bar {
+  background: var(--dark);
+  padding: 0 14px 12px;
+  position: sticky;
+  top: 62px;
+  z-index: 190;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+.search-input {
+  width: 100%;
+  padding: 11px 16px;
+  border: 2px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  font-size: 16px;
+  font-family: inherit;
+  background: rgba(255,255,255,0.10);
+  color: white;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+  -webkit-appearance: none;
+}
+.search-input:focus { border-color: var(--red); background: rgba(255,255,255,0.15); }
+.search-input::placeholder { color: rgba(255,255,255,0.4); }
+
+/* ===== 검색 빈 상태 ===== */
+.search-empty {
+  text-align: center;
+  padding: 60px 20px 20px;
+}
+.search-empty-icon { font-size: 52px; margin-bottom: 14px; }
+.search-empty-text { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+.search-empty-sub { font-size: 14px; color: var(--muted); line-height: 1.5; }
+
+/* ===== 빈 상태 (즐겨찾기) ===== */
+.empty-state {
+  text-align: center;
+  padding: 80px 24px 40px;
+}
+.empty-state-icon { font-size: 64px; margin-bottom: 16px; }
+.empty-state-title { font-size: 20px; font-weight: 900; color: var(--text); margin-bottom: 10px; }
+.empty-state-sub { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+/* ===== 환율 계산기 ===== */
+.currency-card {
+  margin: 14px;
+  background: white;
+  border-radius: 24px;
+  padding: 24px 20px 28px;
+  box-shadow: var(--shadow);
+}
+.currency-rate-badge {
+  text-align: center;
+  margin-bottom: 12px;
+}
+.rate-live   { font-size: 12px; color: #2e7d32; font-weight: 700; background: #e8f5e9; padding: 5px 12px; border-radius: 20px; }
+.rate-cached { font-size: 12px; color: #e65100; font-weight: 700; background: #fff3e0; padding: 5px 12px; border-radius: 20px; }
+.rate-error  { font-size: 12px; color: #c62828; font-weight: 700; background: #ffebee; padding: 5px 12px; border-radius: 20px; }
+.rate-loading { font-size: 12px; color: var(--muted); font-weight: 700; }
+
+.rate-display {
+  text-align: center;
+  margin-bottom: 24px;
+  padding: 14px;
+  background: var(--red-light);
+  border-radius: 14px;
+}
+.rate-num  { font-size: 18px; font-weight: 900; color: var(--text); }
+.rate-eq   { font-size: 16px; color: var(--muted); margin: 0 4px; }
+.rate-krw  { font-size: 18px; font-weight: 900; color: var(--red); }
+
+.currency-inputs {
+  display: flex; flex-direction: column; gap: 4px;
+  margin-bottom: 24px;
+}
+.currency-input-group { display: flex; flex-direction: column; gap: 8px; }
+.currency-label {
+  font-size: 13px; font-weight: 700; color: var(--muted);
+  display: flex; align-items: center; gap: 6px;
+}
+.currency-flag { font-size: 18px; }
+.currency-input-wrap {
+  position: relative;
+  display: flex; align-items: center;
+}
+.currency-input {
+  width: 100%;
+  padding: 16px 50px 16px 18px;
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  font-size: 22px; font-weight: 800;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--gray);
+  outline: none;
+  transition: border-color 0.15s;
+  -webkit-appearance: none;
+}
+.currency-input:focus { border-color: var(--red); background: white; }
+.currency-input:disabled { opacity: 0.5; }
+.currency-input::-webkit-outer-spin-button,
+.currency-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.currency-unit {
+  position: absolute; right: 16px;
+  font-size: 18px; font-weight: 900; color: var(--muted);
+}
+.currency-swap-icon {
+  text-align: center;
+  font-size: 24px; color: var(--muted);
+  padding: 6px 0;
+}
+
+.quick-amounts-label {
+  font-size: 12px; font-weight: 700; color: var(--muted);
+  margin-bottom: 10px; letter-spacing: 0.3px;
+}
+.quick-amounts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.quick-btn {
+  background: var(--gray);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 4px;
+  font-size: 14px; font-weight: 800;
+  color: var(--text); font-family: inherit;
+  cursor: pointer; transition: all 0.12s;
+}
+.quick-btn:active { background: var(--red-light); border-color: var(--red); color: var(--red); transform: scale(0.94); }
+.quick-btn:disabled { opacity: 0.4; cursor: default; }
+
+/* ===== 설정 화면 ===== */
+.settings-list {
+  display: flex; flex-direction: column; gap: 12px;
+  padding: 14px;
+}
+.settings-section {
+  background: white;
+  border-radius: 20px;
+  padding: 18px 16px;
+  box-shadow: var(--shadow);
+}
+.settings-section-title {
+  font-size: 12px; font-weight: 800;
+  color: var(--muted); letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.settings-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.settings-row--toggle { align-items: center; margin-bottom: 0; }
+.settings-row-info { flex: 1; min-width: 0; }
+.settings-row-label { font-size: 16px; font-weight: 700; color: var(--text); }
+.settings-row-sub   { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+.three-way {
+  display: flex;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.three-way-btn {
+  background: none; border: none;
+  padding: 8px 10px;
+  font-size: 13px; font-weight: 700;
+  color: var(--muted); font-family: inherit;
+  cursor: pointer; transition: all 0.12s;
+  white-space: nowrap;
+}
+.three-way-btn + .three-way-btn { border-left: 1.5px solid var(--border); }
+.three-way-btn--active { background: var(--red); color: white; }
+.three-way-btn:active { opacity: 0.75; }
+
+.tts-test-btn {
+  width: 100%;
+  background: var(--red-light);
+  border: 2px solid var(--red);
+  border-radius: 12px;
+  padding: 10px;
+  font-size: 15px; font-weight: 800;
+  color: var(--red); font-family: inherit;
+  cursor: pointer; transition: all 0.12s;
+}
+.tts-test-btn:active { background: var(--red); color: white; }
+
+.font-preview {
+  background: var(--gray);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* 토글 스위치 */
+.toggle-switch {
+  position: relative;
+  width: 52px; height: 30px;
+  background: #ccc;
+  border: none; border-radius: 15px;
+  cursor: pointer; flex-shrink: 0;
+  transition: background 0.2s;
+  padding: 0;
+}
+.toggle-switch--on { background: var(--red); }
+.toggle-thumb {
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 24px; height: 24px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  display: block;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.toggle-switch--on .toggle-thumb { transform: translateX(22px); }
+
+.settings-version {
+  text-align: center;
+  font-size: 13px; font-weight: 700;
+  color: var(--muted);
+  padding: 8px 0 4px;
+}

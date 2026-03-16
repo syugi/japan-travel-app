@@ -1,38 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { speakJapanese } from '../utils/tts';
 import { TTS_RATES, FONT_SCALES } from '../hooks/useSettings';
 
-const PhraseList = ({ situation, settings = {}, isFavorite, toggleFavorite }) => {
+const FavoritesView = ({ data, settings = {}, isFavorite, toggleFavorite }) => {
   const [selectedPhrase, setSelectedPhrase] = useState(null);
 
   const ttsRate = TTS_RATES[settings.ttsSpeed] ?? 0.85;
   const fontScale = FONT_SCALES[settings.fontSize] ?? 1.0;
   const showRomaji = settings.showRomaji !== false;
 
-  if (!situation || !situation.phrases || situation.phrases.length === 0) {
-    return <div className="message">회화 데이터가 없습니다.</div>;
-  }
+  const favoritePhrases = useMemo(() => {
+    return data.flatMap((cat) =>
+      cat.situations.flatMap((sit) =>
+        sit.phrases
+          .filter((p) => isFavorite?.(p.id))
+          .map((phrase) => ({
+            ...phrase,
+            catName: cat.name,
+            catEmoji: cat.emoji,
+            sitName: sit.name,
+          }))
+      )
+    );
+  }, [data, isFavorite]);
 
-  // iOS TTS 잠금 해제
-  useEffect(() => {
-    let ttsUnlocked = false;
-    const unlockTTS = () => {
-      if (ttsUnlocked) return;
-      if ('speechSynthesis' in window) {
-        const u = new SpeechSynthesisUtterance('');
-        window.speechSynthesis.speak(u);
-      }
-      ttsUnlocked = true;
-    };
-    document.addEventListener('touchstart', unlockTTS, { once: true });
-    document.addEventListener('click', unlockTTS, { once: true });
-    return () => {
-      document.removeEventListener('touchstart', unlockTTS);
-      document.removeEventListener('click', unlockTTS);
-    };
-  }, []);
-
-  // 모달 열릴 때 body 스크롤 방지
   useEffect(() => {
     document.body.style.overflow = selectedPhrase ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
@@ -54,26 +45,39 @@ const PhraseList = ({ situation, settings = {}, isFavorite, toggleFavorite }) =>
     toggleFavorite?.(phraseId);
   };
 
+  if (favoritePhrases.length === 0) {
+    return (
+      <div className="screen">
+        <div className="empty-state">
+          <div className="empty-state-icon">⭐</div>
+          <div className="empty-state-title">즐겨찾기가 없어요</div>
+          <div className="empty-state-sub">
+            회화집이나 검색에서 ☆ 버튼을 눌러<br />자주 쓰는 문구를 저장해보세요
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="screen">
-      <div className="phrase-header">
-        <span className="phrase-big-emoji">{situation.emoji}</span>
-        <div className="phrase-sit-name">{situation.name}</div>
-      </div>
       <div className="phrase-list">
-        {situation.phrases.map((phrase) => (
+        {favoritePhrases.map((phrase) => (
           <div
             key={phrase.id}
             className="phrase-card"
             onClick={() => handleCardClick(phrase)}
           >
             <button
-              className={`fav-btn ${isFavorite?.(phrase.id) ? 'fav-btn--active' : ''}`}
+              className="fav-btn fav-btn--active"
               onClick={(e) => handleFavClick(phrase.id, e)}
-              aria-label="즐겨찾기"
+              aria-label="즐겨찾기 해제"
             >
-              {isFavorite?.(phrase.id) ? '★' : '☆'}
+              ★
             </button>
+            <div className="phrase-source">
+              {phrase.catEmoji} {phrase.catName} › {phrase.sitName}
+            </div>
             <div
               className="phrase-kor"
               style={{ fontSize: `${20 * fontScale}px` }}
@@ -151,4 +155,4 @@ const PhraseList = ({ situation, settings = {}, isFavorite, toggleFavorite }) =>
   );
 };
 
-export default PhraseList;
+export default FavoritesView;
