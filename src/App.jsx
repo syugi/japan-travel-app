@@ -6,6 +6,7 @@ import SearchView from './components/SearchView';
 import FavoritesView from './components/FavoritesView';
 import CurrencyCalculator from './components/CurrencyCalculator';
 import SettingsView from './components/SettingsView';
+import PlacesView from './components/PlacesView';
 import BottomTabBar from './components/BottomTabBar';
 import { useSettings } from './hooks/useSettings';
 import { useFavorites } from './hooks/useFavorites';
@@ -14,6 +15,7 @@ import './index.css';
 const TAB_HEADERS = {
   phrasebook: { title: '🇯🇵 일본여행 회화', sub: '누구나 쉬운 일본여행' },
   favorites:  { title: '⭐ 즐겨찾기',        sub: '저장한 문구 모음' },
+  places:     { title: '📍 저장된 장소',      sub: '호텔 · 식당 · 관광지' },
   currency:   { title: '💴 환율 계산기',      sub: 'JPY ↔ KRW' },
   settings:   { title: '⚙️ 설정',            sub: 'TTS · 글자 · 로마자' },
 };
@@ -173,6 +175,8 @@ function App() {
             toggleFavorite={toggleFavorite}
           />
         )}
+
+        {activeTab === 'places' && <PlacesView />}
 
         {activeTab === 'currency' && <CurrencyCalculator />}
 

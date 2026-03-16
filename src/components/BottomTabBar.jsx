@@ -3,6 +3,7 @@ import React from 'react';
 const TABS = [
   { id: 'phrasebook', emoji: '📖', label: '회화집' },
   { id: 'favorites',  emoji: '⭐', label: '즐겨찾기' },
+  { id: 'places',     emoji: '📍', label: '장소'    },
   { id: 'currency',   emoji: '💴', label: '환율'   },
   { id: 'settings',   emoji: '⚙️', label: '설정'   },
 ];
