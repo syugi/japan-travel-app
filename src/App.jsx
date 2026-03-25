@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { AdMob, BannerAdSize, BannerAdPosition } from '@capacitor-community/admob';
+import { Capacitor } from '@capacitor/core';
 import CategoryList from './components/CategoryList';
 import SituationList from './components/SituationList';
 import PhraseList from './components/PhraseList';
@@ -38,19 +39,23 @@ function App() {
   // AdMob Setup
   useEffect(() => {
     const initAdMob = async () => {
-      try {
-        await AdMob.initialize({
-          initializeForTesting: true,
-        });
-        
-        await AdMob.showBanner({
-          adId: 'ca-app-pub-3940256099942544/6300978111', // Google Test Banner ID
-          adSize: BannerAdSize.ADAPTIVE_BANNER,
-          position: BannerAdPosition.BOTTOM_CENTER,
-          margin: 0,
-        });
-      } catch (err) {
-        console.error('AdMob Integration Error:', err);
+      // 폰(네이티브 앱) 환경에서만 작동 및 여백(60px) 설정
+      if (Capacitor.isNativePlatform()) {
+        document.documentElement.style.setProperty('--ad-height', '60px');
+        try {
+          await AdMob.initialize({
+            initializeForTesting: true,
+          });
+          
+          await AdMob.showBanner({
+            adId: 'ca-app-pub-3940256099942544/6300978111', // Google Test Banner ID
+            adSize: BannerAdSize.ADAPTIVE_BANNER,
+            position: BannerAdPosition.BOTTOM_CENTER,
+            margin: 0,
+          });
+        } catch (err) {
+          console.error('AdMob Integration Error:', err);
+        }
       }
     };
     initAdMob();

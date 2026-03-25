@@ -11,7 +11,7 @@
   --text: #1a1a2e;
   --muted: #9090a0;
   --shadow: 0 4px 20px rgba(0,0,0,0.08);
-  --ad-height: 60px; /* 광고 영역 높이 배정 */
+  --ad-height: 0px; /* 웹/PWA에서는 기본 0px, 앱에서만 60px */
 }
 
 html, body { height: 100%; }
