@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { AdMob, BannerAdSize, BannerAdPosition } from '@capacitor-community/admob';
 import CategoryList from './components/CategoryList';
 import SituationList from './components/SituationList';
 import PhraseList from './components/PhraseList';
@@ -6,18 +7,16 @@ import SearchView from './components/SearchView';
 import FavoritesView from './components/FavoritesView';
 import CurrencyCalculator from './components/CurrencyCalculator';
 import SettingsView from './components/SettingsView';
-import PlacesView from './components/PlacesView';
 import BottomTabBar from './components/BottomTabBar';
 import { useSettings } from './hooks/useSettings';
 import { useFavorites } from './hooks/useFavorites';
 import './index.css';
 
 const TAB_HEADERS = {
-  phrasebook: { title: '🇯🇵 일본여행 회화', sub: '누구나 쉬운 일본여행' },
-  favorites:  { title: '⭐ 즐겨찾기',        sub: '저장한 문구 모음' },
-  places:     { title: '📍 저장된 장소',      sub: '호텔 · 식당 · 관광지' },
-  currency:   { title: '💴 환율 계산기',      sub: 'JPY ↔ KRW' },
-  settings:   { title: '⚙️ 설정',            sub: 'TTS · 글자 · 로마자' },
+  phrasebook: { title: '🇯🇵 바로일본', sub: '걱정없는 일본여행' },
+  favorites: { title: '⭐ 즐겨찾기', sub: '저장한 문구 모음' },
+  currency: { title: '💴 환율 계산기', sub: 'JPY ↔ KRW' },
+  settings: { title: '⚙️ 설정', sub: 'TTS · 글자 · 로마자' },
 };
 
 function App() {
@@ -35,6 +34,27 @@ function App() {
 
   const { settings, updateSetting } = useSettings();
   const { isFavorite, toggleFavorite } = useFavorites();
+
+  // AdMob Setup
+  useEffect(() => {
+    const initAdMob = async () => {
+      try {
+        await AdMob.initialize({
+          initializeForTesting: true,
+        });
+        
+        await AdMob.showBanner({
+          adId: 'ca-app-pub-3940256099942544/6300978111', // Google Test Banner ID
+          adSize: BannerAdSize.ADAPTIVE_BANNER,
+          position: BannerAdPosition.BOTTOM_CENTER,
+          margin: 0,
+        });
+      } catch (err) {
+        console.error('AdMob Integration Error:', err);
+      }
+    };
+    initAdMob();
+  }, []);
 
   useEffect(() => {
     fetch('/data/phrases.json')
@@ -92,7 +112,7 @@ function App() {
   const showSearchBar = activeTab === 'phrasebook' && currentView === 'category';
 
   let headerTitle = TAB_HEADERS[activeTab]?.title || '';
-  let headerSub   = TAB_HEADERS[activeTab]?.sub   || '';
+  let headerSub = TAB_HEADERS[activeTab]?.sub || '';
 
   if (activeTab === 'phrasebook') {
     if (currentView === 'situations' && currentCat) {
@@ -175,8 +195,6 @@ function App() {
             toggleFavorite={toggleFavorite}
           />
         )}
-
-        {activeTab === 'places' && <PlacesView />}
 
         {activeTab === 'currency' && <CurrencyCalculator />}
 

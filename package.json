@@ -1,5 +1,5 @@
 {
-  "name": "tmpapp",
+  "name": "baro-japan",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,10 +11,15 @@
     "generate-icons": "pwa-assets-generator"
   },
   "dependencies": {
+    "@capacitor-community/admob": "^8.0.0",
+    "@capacitor/android": "^8.2.0",
+    "@capacitor/cli": "^8.2.0",
+    "@capacitor/core": "^8.2.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
     "@eslint/js": "^9.39.4",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",

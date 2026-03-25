@@ -9,10 +9,6 @@ const PhraseList = ({ situation, settings = {}, isFavorite, toggleFavorite }) =>
   const fontScale = FONT_SCALES[settings.fontSize] ?? 1.0;
   const showRomaji = settings.showRomaji !== false;
 
-  if (!situation || !situation.phrases || situation.phrases.length === 0) {
-    return <div className="message">회화 데이터가 없습니다.</div>;
-  }
-
   // iOS TTS 잠금 해제
   useEffect(() => {
     let ttsUnlocked = false;
@@ -37,6 +33,10 @@ const PhraseList = ({ situation, settings = {}, isFavorite, toggleFavorite }) =>
     document.body.style.overflow = selectedPhrase ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [selectedPhrase]);
+
+  if (!situation || !situation.phrases || situation.phrases.length === 0) {
+    return <div className="message">회화 데이터가 없습니다.</div>;
+  }
 
   const handleSpeak = (text, e) => {
     if (e) e.stopPropagation();
