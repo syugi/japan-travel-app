@@ -16,7 +16,7 @@
 
 html, body { height: 100%; }
 body {
-  font-family: 'Noto Sans KR', -apple-system, sans-serif;
+  font-family: 'Noto Sans KR', -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', 'NanumGothic', sans-serif;
   background: #f0eff5;
   min-height: 100vh;
   overflow-x: hidden;
@@ -135,7 +135,7 @@ main {
 .phrase-card:active { transform: scale(0.97); }
 .phrase-kor { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
 .phrase-jp  { font-size: 15px; font-weight: 500; color: #bbb; line-height: 1.4; margin-bottom: 7px; }
-.phrase-roma { font-size: 18px; font-weight: 700; color: #1565C0; font-style: normal; letter-spacing: 0.2px; }
+.phrase-roma { font-size: 18px; font-weight: 700; color: #1565C0; font-style: normal; letter-spacing: 0.2px; font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', 'NanumGothic', sans-serif; }
 .speak-btn {
   position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
   background: var(--red); color: white; border: none;
